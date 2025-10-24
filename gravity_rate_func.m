@@ -26,4 +26,3 @@ function dVdt = gravity_rate_func(t,V,orbit_params)
     ay = a(2);
 
     dVdt = [vx; vy; ax; ay];
-end
