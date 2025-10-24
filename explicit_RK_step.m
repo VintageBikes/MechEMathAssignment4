@@ -21,17 +21,16 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
     BT_c = BT_struct.C;
 
     s = length(BT_b);
-    K_list = zeros(length(XA), num_stages);
-    K_list(:, 1) = rate_func_in(t, XA);
+    K = zeros(length(XA), s);
     % Fill K_list
-    for i = 2:s
+    for n = 1:s
         % sum_aK = Σ(a_i,j * K_j)
-        sum_aK = K * (BT_a(i,:)');
-        K_list(:, i) = rate_func_in(t + BT_c(i)*h, XA + h*sum_aK);
+        t_temp = t + BT_c(n)*h;
+        X_temp = XA + h*K*BT_a(n,:)';
+        K_list(:, n) = rate_func_in(t_temp, X_temp);
     end
     
-    % sum_bK = Σ(b_i * K_i)
-    sum_bK = K*B;
-    XB = XA + h*sum_bK;
+    % sum_bK = Σ(b_i * K_i)z
+    XB = XA + h*K*BT_b';
     num_evals = s;
 end

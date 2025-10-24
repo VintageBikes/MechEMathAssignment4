@@ -20,15 +20,14 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration .
     h_avg = (tspan(2) - tspan(1)) / N;
 
     t_list = linspace(tspan(1), tspan(2), N+1);
-    X_list = zeros(length(X0), N+1);
-    X_list(:, 1) = X0;
-    X_N = X0;
+    X_list = zeros(N+1, length(X0));
+    X_list(1, :) = X0';
     
     num_evals = 0;
     
-    for i = 1:N
-        [X_N, delta_num_evals] = explicit_RK_step(rate_func_in, t_list(i), X_N, h_avg, BT_struct);
+    for n = 1:N
+        [X_N, delta_num_evals] = explicit_RK_step(rate_func_in, t_list(n), X_list(n,:)', h_avg, BT_struct);
         num_evals = num_evals + delta_num_evals;
-        X_list(:, i+1) = X_N;
+        X_list(n+1, :) = X_N';
     end
 end
