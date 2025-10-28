@@ -27,7 +27,7 @@ function [XB, num_evals] = explicit_RK_step(rate_func_in,t,XA,h,BT_struct)
         % sum_aK = Σ(a_i,j * K_j)
         t_temp = t + BT_c(n)*h;
         X_temp = XA + h*K*BT_a(n,:)';
-        K_list(:, n) = rate_func_in(t_temp, X_temp);
+        K(:, n) = rate_func_in(t_temp, X_temp);
     end
     
     % sum_bK = Σ(b_i * K_i)z
