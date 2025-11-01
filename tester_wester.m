@@ -14,9 +14,12 @@ Bogacki.A = [0,0,0,0; 1/2,0,0,0; 0,3/4,0,0; 2/9,1/3, 4/9, 0];
 
 p = 1;
 
-error_desired = 0.00000000001;
+error_desired = 1e-10;
 
 [XB1, XB2, num_evals] = RK_step_embedded(@rate_func01,t,XA,h,Bogacki);
+
+[XB, num_evals2, h_next, redo] = explicit_RK_variable_step(@rate_func01,t,XA,h,Bogacki,p,error_desired);
+
 
 function dXdt = rate_func01(t,X)
     dXdt = -5*X + 5*cos(t) - sin(t);
