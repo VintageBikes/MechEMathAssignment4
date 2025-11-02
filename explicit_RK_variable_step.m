@@ -23,29 +23,21 @@
 %redo: False if the estimated error was less than error_desired
 % True if the estimated error was larger than error_desired
 function [XB, num_evals, h_next, redo] = explicit_RK_variable_step(rate_func_in,t,XA,h,BT_struct,p,error_desired)
-    BT_a = BT_struct.A;
-    BT_b = BT_struct.B;
-    BT_c = BT_struct.C;
-
-    s = length(BT_b);
-    K = zeros(length(XA), s);
-    % Fill K_list
-    for n = 1:s
-        % sum_aK = Σ(a_i,j * K_j)
-        t_temp = t + BT_c(n)*h;
-        X_temp = XA + h*K*BT_a(n,:)';
-        K(:, n) = rate_func_in(t_temp, X_temp);
-    end
     
-    % sum_bK = Σ(b_i * K_i)z
-    XB(1) = XA + h*K*(BT_b(1,:))';
-    XB(2) = XA + h*K*(BT_b(2,:))';
-    num_evals = s;
+    [XB1, XB2, num_evals] = RK_step_embedded(rate_func_in, t, XA, h, BT_struct);
 
-    est_error = k*(h^p);
-    
-    redo = false;
-    if est_error > error_desired
+    est_error = norm(XB1 - XB2);
+
+    %Do we redo?
+    if est_error <= error_desired
+        XB = XB1;   
+        redo = false;
+    else
+        XB = XB1;   % Just giving it a value. Will be overwritten when we redo
         redo = true;
     end
+
+    %Get next step size
+    alpha = 5; % TUNE this value [1.5, 10] is the provided range
+    h_next = (min(0.9*((error_desired/est_error)^(1/p)), alpha))*h;
 end
