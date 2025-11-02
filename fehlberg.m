@@ -16,45 +16,20 @@ function day_2025_10_21_coding()
 
     my_rate = @(t_in, V_in) gravity_rate_func(t_in, V_in, orbit_params);
 
-    DormandPrince = struct();
-    DormandPrince.C = [0, 1/5, 3/10, 4/5, 8/9, 1, 1];
-    DormandPrince.B = [35/384, 0, 500/1113, 125/192, -2187/6784, 11/84, 0;...
-    5179/57600, 0, 7571/16695, 393/640, -92097/339200, 187/2100, 1/40];
-    DormandPrince.A = [0,0,0,0,0,0,0;
-    1/5, 0, 0, 0,0,0,0;...
-    3/40, 9/40, 0, 0, 0, 0,0;...
-    44/45, -56/15, 32/9, 0, 0, 0,0;...
-    19372/6561, -25360/2187, 64448/6561, -212/729, 0, 0,0;...
-    9017/3168, -355/33, 46732/5247, 49/176, -5103/18656, 0,0;...
-    35/384, 0, 500/1113, 125/192, -2187/6784, 11/84,0];
+    Fehlberg = struct();
+    Fehlberg.C = [0, 1/4, 3/8, 12/13, 1, 1/2];
+    Fehlberg.B = [16/135, 0, 6656/12825, 28561/56430, -9/50, 2/55;...
+    25/216, 0, 1408/2565, 2197/4104, -1/5, 0];
+    Fehlberg.A = [0,0,0,0,0,0;...
+    1/4, 0,0,0,0,0;...
+    3/32, 9/32, 0,0,0,0;...
+    1932/2197, -7200/2197, 7296/2197, 0,0,0;...
+    439/216, -8, 3680/513, -845/4104, 0,0;...
+    -8/27, 2, -3544/2565, 1859/4104, -11/40, 0];
 
+     h_ref = 0.5;
     
-    h_ref = 0.5;
-    
-    %[t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration(my_rate,tspan,V0,h_ref,DormandPrince);
-    
-    
-    % figure(1)
-    % subplot(2, 1, 1);
-    % hold on;
-    % plot(t_range,V_list(:, 1), 'k', 'linewidth', 2);
-    % plot(t_range,V_list(:, 2), 'b', 'linewidth', 2);
-    % 
-    % plot(t_list, X_list(:, 1), 'r--', 'linewidth', 2);
-    % plot(t_list, X_list(:, 2), 'r--', 'linewidth', 2);
-    % xlabel('time');
-    % ylabel('position component');
-    % 
-    % subplot(2, 1, 2);
-    % hold on;
-    % plot(t_range,V_list(:, 3), 'k', 'linewidth', 2);
-    % plot(t_range,V_list(:, 4), 'b', 'linewidth', 2);
-    % 
-    % plot(t_list, X_list(:, 3), 'r--', 'linewidth', 2);
-    % plot(t_list, X_list(:, 4), 'r--', 'linewidth', 2);
-    % xlabel('time');
-    % ylabel('velocity component');
-
+  
 
     %local truncation error experiments for embedded method
     n_samples = 60;
@@ -68,7 +43,7 @@ function day_2025_10_21_coding()
          h_ref = h_ref_list(n);
          V_list = compute_planetary_motion(tspan(1)+h_ref, V0, orbit_params);
 
-         [XB1,XB2,~] = RK_step_embedded(my_rate, tspan(1), V0, h_ref, DormandPrince);
+         [XB1,XB2,~] = RK_step_embedded(my_rate, tspan(1), V0, h_ref, Fehlberg);
 
          abs_diff_list(n) = norm(V_list-V0);
          tr_error_list1(n) = norm(XB1-V_list);

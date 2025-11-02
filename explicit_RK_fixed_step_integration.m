@@ -25,9 +25,9 @@ function [t_list,X_list,h_avg, num_evals] = explicit_RK_fixed_step_integration .
     
     num_evals = 0;
     
-    for n = 1:N
-        [X_N, delta_num_evals] = explicit_RK_step(rate_func_in, t_list(n), X_list(n,:)', h_avg, BT_struct);
+    for m = 1:N
+        [XB, delta_num_evals] = explicit_RK_step(rate_func_in, t_list(m), X_list(m,:)', h_avg, BT_struct);
         num_evals = num_evals + delta_num_evals;
-        X_list(n+1, :) = X_N';
+        X_list(m+1, :) = XB';
     end
 end
