@@ -10,7 +10,7 @@ orbit_params.G = 40;
 
 rate_func_in = @(t, V) gravity_rate_func(t, V, orbit_params);
 solution_func_in = @(t, V) compute_planetary_motion(t, V, orbit_params);
-t_span = [0, 16];
+t_span = [0, 1000];
 V0 = [8; 0; 0; 1.5];
 h_ref = 0.2;
 
@@ -56,7 +56,7 @@ for i = 1:length(t_list)
 end
 
 %% Approximate Solutions vs. Actual Solutions
-figure(1)
+figure()
 colors = ['k', 'b', 'm', 'r'];
 for i = 1:length(V0)
     plot(t_list, V_list_1(:,i), colors(i) + "-");
@@ -71,7 +71,26 @@ title("Runge-Kutta Methods vs. Time")
 xlabel('Time');
 ylabel('Solution');
 legend("Eulers's Method", "Ralston's Method", "Ralston's 3rd-Order Method", "Ralston's 4th-Order Method", "Actual Solution")
+xlim([0,10]); ylim([-13,9]);
 grid on;
+
+%% Approximate Solutions vs. Actual Solutions (position only)
+figure()
+colors = ['k', 'b', 'm', 'r', 'g'];
+plot(V_list_1(:, 1), V_list_1(:, 2), 'b-')
+hold on;
+plot(V_list_2(:, 1), V_list_2(:, 2), 'm-')
+plot(V_list_3(:, 1), V_list_3(:, 2), 'r-')
+plot(V_list_4(:, 1), V_list_4(:, 2), 'g-')
+plot(solution_V_list(:, 1), solution_V_list(:, 2), 'k-')
+
+title("Planetary Motion Position for Runge-Kutta Methods")
+xlabel('x Position');
+ylabel('y Position');
+legend("Eulers's Method", "Ralston's Method", "Ralston's 3rd-Order Method", "Ralston's 4th-Order Method", "Actual Solution")
+xlim([-6, 10]); ylim([-15, 5]);
+grid on;
+
 
 %% Calculate Local Truncation Error
 num_points = 100;
@@ -113,7 +132,7 @@ p_4 = polyfit(log(h_list(iy_4:ix)), log(lte_4(iy_4:ix)), 1);
 y_hat_4 = exp(p_4(1) * log(h_list) + p_4(2));
 
 % Plot
-figure(2);
+figure();
 loglog(h_list(1:ix), y_hat_analytical(1:ix),'-k')
 hold on;
 loglog(h_list(iy_1:ix), y_hat_1(iy_1:ix), '-b')
@@ -139,18 +158,18 @@ disp("Ralston's 3rd-Order Method p-value: " + p_3(1))
 disp("Ralston's 4th-Order Method p-value: " + p_4(1))
 
 %% Calculate Global Truncation Error
-num_points = 100;
-h_list = logspace(-5, -1, num_points);
-t_span = [0, 10];
-
-disp("Running Forward Euler Global Truncation Error")
-[gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
-disp("Running Ralston's Method Global Truncation Error")
-[gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-disp("Running Ralston's 3rd-Order Method Global Truncation Error")
-[gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-disp("Running Ralston's 4th-Order Method Global Truncation Error")
-[gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+% num_points = 100;
+% h_list = logspace(-5, -1, num_points);
+% t_span = [0, 10];
+% 
+% disp("Running Forward Euler Global Truncation Error")
+% [gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
+% disp("Running Ralston's Method Global Truncation Error")
+% [gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+% disp("Running Ralston's 3rd-Order Method Global Truncation Error")
+% [gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+% disp("Running Ralston's 4th-Order Method Global Truncation Error")
+% [gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
 
 %% Create fit lines for global truncation vs. h_values
 threshold = 5e-12;  % h_values are stable until they exceed this threshold
@@ -172,7 +191,7 @@ p_4 = polyfit(log(h_avg_list(iy_4:end)), log(gte_4(iy_4:end)), 1);
 y_hat_4 = exp(p_4(1) * log(h_avg_list) + p_4(2));
 
 % Plot
-figure(3);
+figure();
 loglog(h_avg_list(iy_1:end), y_hat_1(iy_1:end), '-b')
 hold on;
 loglog(h_avg_list(iy_2:end), y_hat_2(iy_2:end), '-m')
@@ -215,7 +234,7 @@ p_4 = polyfit(log(num_evals_list_4(iy_4:end)), log(gte_4(iy_4:end)), 1);
 y_hat_4 = exp(p_4(1) * log(num_evals_list_4) + p_4(2));
 
 % Plot
-figure(4);
+figure();
 loglog(num_evals_list_1(iy_1:end), y_hat_1(iy_1:end), '-b')
 hold on;
 loglog(num_evals_list_2(iy_2:end), y_hat_2(iy_2:end), '-m')
