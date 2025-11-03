@@ -30,7 +30,7 @@ function [XB, num_evals, h_next, redo] = explicit_RK_variable_step(rate_func_in,
 
     %Do we redo?
     if est_error <= error_desired
-        XB = XB1;   
+        XB = XB1;
         redo = false;
     else
         XB = XB1;   % Just giving it a value. Will be overwritten when we redo
@@ -38,6 +38,6 @@ function [XB, num_evals, h_next, redo] = explicit_RK_variable_step(rate_func_in,
     end
 
     %Get next step size
-    alpha = 5; % TUNE this value [1.5, 10] is the provided range
+    alpha = 10; % TUNE this value [1.5, 10] is the provided range
     h_next = (min(0.9*((error_desired/est_error)^(1/p)), alpha))*h;
 end
