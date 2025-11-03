@@ -4,7 +4,7 @@ clf;
 close all;
 
 t = 0;
-XA = [1; 2];
+XA = [1];
 h = 0.1;
 
 % Create Bogacki butcher tableau
@@ -27,7 +27,7 @@ t_span = [0, 7];
 
 plot(t_list, X_list(:,1), '-k')
 hold on;
-plot(t_list, X_list(:,2))
+% plot(t_list, X_list(:,2))
 
 function dXdt = rate_func01(t,X)
     dXdt = -5*X + 5*cos(t) - sin(t);
