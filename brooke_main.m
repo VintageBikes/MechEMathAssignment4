@@ -114,12 +114,12 @@ y_hat_4 = exp(p_4(1) * log(h_list) + p_4(2));
 
 % Plot
 figure(2);
-loglog(h_list, y_hat_analytical,'-k')
+loglog(h_list(1:ix), y_hat_analytical(1:ix),'-k')
 hold on;
-loglog(h_list, y_hat_1, '-b')
-loglog(h_list, y_hat_2, '-m')
-loglog(h_list, y_hat_3, '-r')
-loglog(h_list, y_hat_4, '-g')
+loglog(h_list(iy_1:ix), y_hat_1(iy_1:ix), '-b')
+loglog(h_list(iy_2:ix), y_hat_2(iy_2:ix), '-m')
+loglog(h_list(iy_3:ix), y_hat_3(iy_3:ix), '-r')
+loglog(h_list(iy_4:ix), y_hat_4(iy_4:ix), '-g')
 
 loglog(h_list, analytical_difference, '+k')
 loglog(h_list, lte_1, '+b');
@@ -139,18 +139,18 @@ disp("Ralston's 3rd-Order Method p-value: " + p_3(1))
 disp("Ralston's 4th-Order Method p-value: " + p_4(1))
 
 %% Calculate Global Truncation Error
-% num_points = 100;
-% h_list = logspace(-5, -1, num_points);
-% t_span = [0, 10];
-% 
-% disp("Running Forward Euler Global Truncation Error")
-% [gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's Method Global Truncation Error")
-% [gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's 3rd-Order Method Global Truncation Error")
-% [gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's 4th-Order Method Global Truncation Error")
-% [gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+num_points = 100;
+h_list = logspace(-5, -1, num_points);
+t_span = [0, 10];
+
+disp("Running Forward Euler Global Truncation Error")
+[gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's Method Global Truncation Error")
+[gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's 3rd-Order Method Global Truncation Error")
+[gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's 4th-Order Method Global Truncation Error")
+[gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
 
 %% Create fit lines for global truncation vs. h_values
 threshold = 5e-12;  % h_values are stable until they exceed this threshold
@@ -173,11 +173,11 @@ y_hat_4 = exp(p_4(1) * log(h_avg_list) + p_4(2));
 
 % Plot
 figure(3);
-loglog(h_avg_list, y_hat_1, '-b')
+loglog(h_avg_list(iy_1:end), y_hat_1(iy_1:end), '-b')
 hold on;
-loglog(h_avg_list, y_hat_2, '-m')
-loglog(h_avg_list, y_hat_3, '-r')
-loglog(h_avg_list, y_hat_4, '-g')
+loglog(h_avg_list(iy_2:end), y_hat_2(iy_2:end), '-m')
+loglog(h_avg_list(iy_3:end), y_hat_3(iy_3:end), '-r')
+loglog(h_avg_list(iy_4:end), y_hat_4(iy_4:end), '-g')
 
 loglog(h_avg_list, gte_1, '+b');
 loglog(h_avg_list, gte_2, '+m');
@@ -216,11 +216,11 @@ y_hat_4 = exp(p_4(1) * log(num_evals_list_4) + p_4(2));
 
 % Plot
 figure(4);
-loglog(num_evals_list_1, y_hat_1, '-b')
+loglog(num_evals_list_1(iy_1:end), y_hat_1(iy_1:end), '-b')
 hold on;
-loglog(num_evals_list_2, y_hat_2, '-m')
-loglog(num_evals_list_3, y_hat_3, '-r')
-loglog(num_evals_list_4, y_hat_4, '-g')
+loglog(num_evals_list_2(iy_2:end), y_hat_2(iy_2:end), '-m')
+loglog(num_evals_list_3(iy_3:end), y_hat_3(iy_3:end), '-r')
+loglog(num_evals_list_4(iy_4:end), y_hat_4(iy_4:end), '-g')
 
 loglog(num_evals_list_1, gte_1, '+b');
 loglog(num_evals_list_2, gte_2, '+m');
