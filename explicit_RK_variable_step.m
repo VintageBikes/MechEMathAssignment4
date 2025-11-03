@@ -30,7 +30,7 @@ function [XB, num_evals, h_next, redo] = explicit_RK_variable_step(rate_func_in,
 
     %Do we redo?
     if est_error <= error_desired
-        XB = XB1;   
+        XB = XB1;
         redo = false;
     else
         XB = XB1;   % Just giving it a value. Will be overwritten when we redo
