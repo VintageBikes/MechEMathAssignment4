@@ -55,8 +55,28 @@ solution_V_list = compute_planetary_motion(t_list, V0, orbit_params);
 
 %% Approximate Solutions vs. Actual Solutions
 figure()
-colors = ['k', 'b', 'm', 'r'];
-for i = 1:length(V0)
+subplot(2, 1, 1)
+colors = ['k', 'r', 'k', 'r'];
+for i = 1:2
+    plot(t_list, V_list_1(:,i), colors(i) + "-");
+    hold on;
+    plot(t_list, V_list_1(:,i), colors(2) + "-");
+    plot(t_list, V_list_1(:,i), colors(i) + "-");
+    plot(t_list, V_list_2(:,i), colors(i) + "-.");
+    plot(t_list, V_list_3(:,i), colors(i) + ":");
+    plot(t_list, V_list_4(:,i), colors(i) + "--");
+    plot(t_list, solution_V_list(:,i), colors(i) + "-o");
+end
+
+title("Runge-Kutta Positions vs. Time")
+xlabel('Time');
+ylabel('Position');
+legend("x position/velocity", "y position/velocity")
+xlim([0,5]), ylim([-2,2]);
+grid on;
+
+subplot(2, 1, 2)
+for i = 3:4
     plot(t_list, V_list_1(:,i), colors(i) + "-");
     hold on;
     plot(t_list, V_list_2(:,i), colors(i) + "-.");
@@ -65,9 +85,9 @@ for i = 1:length(V0)
     plot(t_list, solution_V_list(:,i), colors(i) + "-o");
 end
 
-title("Runge-Kutta Methods vs. Time")
+title("Runge-Kutta Velocities vs. Time")
 xlabel('Time');
-ylabel('Solution');
+ylabel('Velocity');
 legend("Eulers's Method", "Ralston's Method", "Ralston's 3rd-Order Method", "Ralston's 4th-Order Method", "Actual Solution")
 xlim([0,5]), ylim([-7,7]);
 grid on;
