@@ -20,7 +20,7 @@ function dVdt = gravity_rate_func(t,V,orbit_params)
     m_p = orbit_params.m_planet;
     G = orbit_params.G;
 
-    a = (-(m_p*m_s*G)/r_mag^3)*r;
+    a = (-(m_s*G)/r_mag^3)*r;
 
     ax = a(1); 
     ay = a(2);

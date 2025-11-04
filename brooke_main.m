@@ -5,8 +5,8 @@ close all;
 %% Calculate RK Solutions and Actual Solution
 orbit_params = struct();
 orbit_params.m_sun = 1;
-orbit_params.m_planet = 1;
-orbit_params.G = 40;
+orbit_params.m_planet = 1/330000;
+orbit_params.G = 4*pi^2 / m_sun;
 
 rate_func_in = @(t, V) gravity_rate_func(t, V, orbit_params);
 solution_func_in = @(t, V) compute_planetary_motion(t, V, orbit_params);
