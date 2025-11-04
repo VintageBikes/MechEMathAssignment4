@@ -6,12 +6,12 @@ close all;
 orbit_params = struct();
 orbit_params.m_sun = 1;
 orbit_params.m_planet = 1/330000;
-orbit_params.G = 4*pi^2 / m_sun;
+orbit_params.G = 4*pi^2 / orbit_params.m_sun;
 
 rate_func_in = @(t, V) gravity_rate_func(t, V, orbit_params);
 solution_func_in = @(t, V) compute_planetary_motion(t, V, orbit_params);
 t_span = [0, 1000];
-V0 = [8; 0; 0; 1.5];
+V0 = [1; 0; 0; 2*pi];
 h_ref = 0.2;
 
 % Create butcher tableau
@@ -158,18 +158,18 @@ disp("Ralston's 3rd-Order Method p-value: " + p_3(1))
 disp("Ralston's 4th-Order Method p-value: " + p_4(1))
 
 %% Calculate Global Truncation Error
-% num_points = 100;
-% h_list = logspace(-5, -1, num_points);
-% t_span = [0, 10];
-% 
-% disp("Running Forward Euler Global Truncation Error")
-% [gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's Method Global Truncation Error")
-% [gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's 3rd-Order Method Global Truncation Error")
-% [gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
-% disp("Running Ralston's 4th-Order Method Global Truncation Error")
-% [gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+num_points = 100;
+h_list = logspace(-5, -1, num_points);
+t_span = [0, 10];
+
+disp("Running Forward Euler Global Truncation Error")
+[gte_1, h_avg_list, num_evals_list_1] = global_truncation_error(forward_euler, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's Method Global Truncation Error")
+[gte_2, ~, num_evals_list_2] = global_truncation_error(ralstons_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's 3rd-Order Method Global Truncation Error")
+[gte_3, ~, num_evals_list_3] = global_truncation_error(ralstons_third_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
+disp("Running Ralston's 4th-Order Method Global Truncation Error")
+[gte_4, ~, num_evals_list_4] = global_truncation_error(ralstons_fourth_order_method, rate_func_in, solution_func_in, V0, t_span, h_list);
 
 %% Create fit lines for global truncation vs. h_values
 threshold = 5e-12;  % h_values are stable until they exceed this threshold
