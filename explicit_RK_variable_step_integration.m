@@ -59,5 +59,6 @@ function [t_list,X_list,h_avg, num_evals, num_failed_steps] = explicit_RK_variab
     end
 
     h_avg = mean(diff(t_list));
+    num_evals = num_total_evals;
 
 end
